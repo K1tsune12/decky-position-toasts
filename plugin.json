@@ -1,0 +1,11 @@
+{
+  "name": "Position Toasts",
+  "author": "K1tsune12",
+  "flags": [],
+  "api_version": 1,
+  "publish": {
+    "tags": ["notifications", "qol", "customization"],
+    "description": "Move Steam Deck notification toasts to any corner, with adjustable margins.",
+    "image": ""
+  }
+}
