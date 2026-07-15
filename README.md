@@ -3,7 +3,7 @@
 A [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader) plugin that
 moves Steam Deck notification toasts to any corner of the screen, with adjustable
 margins and a custom entry animation. Companion to
-[Sound Toasts](https://github.com/K1tsune12/sound-toasts).
+[Sound Toasts](https://github.com/K1tsune12/decky-sound-toasts).
 
 ## Features
 
