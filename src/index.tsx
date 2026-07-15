@@ -137,7 +137,7 @@ function SettingsPanel() {
           <ButtonItem
             layout="below"
             onClick={() =>
-              toaster.toast({ title: 'Position Toasts', body: 'Test notification — this is where toasts appear.' })
+              toaster.toast({ title: 'Decky Position Toasts', body: 'Test notification — this is where toasts appear.' })
             }
           >
             Send test notification
@@ -156,8 +156,8 @@ export default definePlugin(() => {
   if (!animator.init()) console.warn('[position-toasts] animator disabled this session');
 
   return {
-    name: 'Position Toasts',
-    titleView: <div className={staticClasses.Title}>Position Toasts</div>,
+    name: 'Decky Position Toasts',
+    titleView: <div className={staticClasses.Title}>Decky Position Toasts</div>,
     content: <SettingsPanel />,
     icon: <FaBell />,
     onDismount() {

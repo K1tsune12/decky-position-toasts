@@ -1,4 +1,4 @@
-# Position Toasts
+# Decky Position Toasts
 
 A [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader) plugin that
 moves Steam Deck notification toasts to any corner of the screen, with adjustable
