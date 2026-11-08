@@ -62,39 +62,40 @@ function SettingsPanel() {
             onChange={(v) => update({ enabled: v })}
           />
         </PanelSectionRow>
-        <PanelSectionRow>
-          <DropdownItem
-            label={t('position.corner')}
-            disabled={!s.enabled}
-            selectedOption={s.corner}
-            rgOptions={localized(CORNER_OPTIONS)}
-            onChange={(o) => update({ corner: o.data as Corner })}
-          />
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <SliderField
-            label={t('position.horizontal')}
-            disabled={!s.enabled}
-            value={s.horizontalInset}
-            min={0}
-            max={200}
-            step={4}
-            showValue
-            onChange={(v) => update({ horizontalInset: v })}
-          />
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <SliderField
-            label={t('position.vertical')}
-            disabled={!s.enabled}
-            value={s.verticalInset}
-            min={0}
-            max={200}
-            step={4}
-            showValue
-            onChange={(v) => update({ verticalInset: v })}
-          />
-        </PanelSectionRow>
+        {s.enabled && (
+          <>
+            <PanelSectionRow>
+              <DropdownItem
+                label={t('position.corner')}
+                selectedOption={s.corner}
+                rgOptions={localized(CORNER_OPTIONS)}
+                onChange={(o) => update({ corner: o.data as Corner })}
+              />
+            </PanelSectionRow>
+            <PanelSectionRow>
+              <SliderField
+                label={t('position.horizontal')}
+                value={s.horizontalInset}
+                min={0}
+                max={200}
+                step={4}
+                showValue
+                onChange={(v) => update({ horizontalInset: v })}
+              />
+            </PanelSectionRow>
+            <PanelSectionRow>
+              <SliderField
+                label={t('position.vertical')}
+                value={s.verticalInset}
+                min={0}
+                max={200}
+                step={4}
+                showValue
+                onChange={(v) => update({ verticalInset: v })}
+              />
+            </PanelSectionRow>
+          </>
+        )}
       </PanelSection>
 
       <PanelSection title={t('anim.title')}>
@@ -106,36 +107,38 @@ function SettingsPanel() {
             onChange={(v) => update({ animEnabled: v })}
           />
         </PanelSectionRow>
-        <PanelSectionRow>
-          <DropdownItem
-            label={t('anim.effect')}
-            disabled={!s.animEnabled}
-            selectedOption={s.animEffect}
-            rgOptions={localized(EFFECT_OPTIONS)}
-            onChange={(o) => update({ animEffect: o.data as AnimEffect })}
-          />
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <DropdownItem
-            label={t('anim.direction')}
-            disabled={!s.animEnabled || !slideEffect}
-            selectedOption={s.animDirection}
-            rgOptions={localized(DIRECTION_OPTIONS)}
-            onChange={(o) => update({ animDirection: o.data as AnimDirection })}
-          />
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <SliderField
-            label={t('anim.duration')}
-            disabled={!s.animEnabled}
-            value={s.animDurationMs}
-            min={100}
-            max={1200}
-            step={50}
-            showValue
-            onChange={(v) => update({ animDurationMs: v })}
-          />
-        </PanelSectionRow>
+        {s.animEnabled && (
+          <>
+            <PanelSectionRow>
+              <DropdownItem
+                label={t('anim.effect')}
+                selectedOption={s.animEffect}
+                rgOptions={localized(EFFECT_OPTIONS)}
+                onChange={(o) => update({ animEffect: o.data as AnimEffect })}
+              />
+            </PanelSectionRow>
+            <PanelSectionRow>
+              <DropdownItem
+                label={t('anim.direction')}
+                disabled={!slideEffect}
+                selectedOption={s.animDirection}
+                rgOptions={localized(DIRECTION_OPTIONS)}
+                onChange={(o) => update({ animDirection: o.data as AnimDirection })}
+              />
+            </PanelSectionRow>
+            <PanelSectionRow>
+              <SliderField
+                label={t('anim.duration')}
+                value={s.animDurationMs}
+                min={100}
+                max={1200}
+                step={50}
+                showValue
+                onChange={(v) => update({ animDurationMs: v })}
+              />
+            </PanelSectionRow>
+          </>
+        )}
       </PanelSection>
 
       <PanelSection title={t('preview.title')}>
