@@ -8,38 +8,44 @@ import {
   ToggleField,
   staticClasses,
 } from '@decky/ui';
-import { useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FaBell } from 'react-icons/fa';
 
 import { Animator } from './animator';
+import { Key, LANGUAGE_NAMES, Lang, LangSetting, getLangSetting, initLanguage, setLangSetting, steamLanguageNow, t, useLanguage } from './i18n';
 import { Positioner } from './positioner';
 import { AnimDirection, AnimEffect, Corner, PosSettings, getSettings, saveSettings } from './settings';
 
-const CORNER_OPTIONS: { data: Corner; label: string }[] = [
-  { data: Corner.TopLeft, label: 'Top left' },
-  { data: Corner.TopRight, label: 'Top right' },
-  { data: Corner.BottomLeft, label: 'Bottom left' },
-  { data: Corner.BottomRight, label: 'Bottom right' },
+const CORNER_OPTIONS: { data: Corner; label: Key }[] = [
+  { data: Corner.TopLeft, label: 'corner.topLeft' },
+  { data: Corner.TopRight, label: 'corner.topRight' },
+  { data: Corner.BottomLeft, label: 'corner.bottomLeft' },
+  { data: Corner.BottomRight, label: 'corner.bottomRight' },
 ];
 
-const EFFECT_OPTIONS: { data: AnimEffect; label: string }[] = [
-  { data: 'slide-fade', label: 'Slide + fade' },
-  { data: 'slide', label: 'Slide' },
-  { data: 'fade', label: 'Fade' },
-  { data: 'scale', label: 'Scale' },
+const EFFECT_OPTIONS: { data: AnimEffect; label: Key }[] = [
+  { data: 'slide-fade', label: 'effect.slideFade' },
+  { data: 'slide', label: 'effect.slide' },
+  { data: 'fade', label: 'effect.fade' },
+  { data: 'scale', label: 'effect.scale' },
 ];
 
-const DIRECTION_OPTIONS: { data: AnimDirection; label: string }[] = [
-  { data: 'left', label: 'From left' },
-  { data: 'right', label: 'From right' },
-  { data: 'top', label: 'From top' },
-  { data: 'bottom', label: 'From bottom' },
+const DIRECTION_OPTIONS: { data: AnimDirection; label: Key }[] = [
+  { data: 'left', label: 'direction.left' },
+  { data: 'right', label: 'direction.right' },
+  { data: 'top', label: 'direction.top' },
+  { data: 'bottom', label: 'direction.bottom' },
 ];
+
+/** Dropdown options with their labels in the current language. */
+const localized = <T,>(options: { data: T; label: Key }[]) =>
+  options.map((o) => ({ data: o.data, label: t(o.label) }));
 
 let positioner: Positioner | undefined;
 let animator: Animator | undefined;
 
 function SettingsPanel() {
+  useLanguage();
   const [s, setS] = useState<PosSettings>(() => getSettings());
   const update = (patch: Partial<PosSettings>) => setS(saveSettings(patch));
 
@@ -47,27 +53,27 @@ function SettingsPanel() {
 
   return (
     <>
-      <PanelSection title="Position">
+      <PanelSection title={t('position.title')}>
         <PanelSectionRow>
           <ToggleField
-            label="Move notifications"
-            description="When off, Steam's default position is used."
+            label={t('position.move')}
+            description={t('position.moveDesc')}
             checked={s.enabled}
             onChange={(v) => update({ enabled: v })}
           />
         </PanelSectionRow>
         <PanelSectionRow>
           <DropdownItem
-            label="Corner"
+            label={t('position.corner')}
             disabled={!s.enabled}
             selectedOption={s.corner}
-            rgOptions={CORNER_OPTIONS}
+            rgOptions={localized(CORNER_OPTIONS)}
             onChange={(o) => update({ corner: o.data as Corner })}
           />
         </PanelSectionRow>
         <PanelSectionRow>
           <SliderField
-            label="Horizontal margin (px)"
+            label={t('position.horizontal')}
             disabled={!s.enabled}
             value={s.horizontalInset}
             min={0}
@@ -79,7 +85,7 @@ function SettingsPanel() {
         </PanelSectionRow>
         <PanelSectionRow>
           <SliderField
-            label="Vertical margin (px)"
+            label={t('position.vertical')}
             disabled={!s.enabled}
             value={s.verticalInset}
             min={0}
@@ -91,36 +97,36 @@ function SettingsPanel() {
         </PanelSectionRow>
       </PanelSection>
 
-      <PanelSection title="Animation">
+      <PanelSection title={t('anim.title')}>
         <PanelSectionRow>
           <ToggleField
-            label="Custom entry animation"
-            description="When off, Steam's default animation is used."
+            label={t('anim.custom')}
+            description={t('anim.customDesc')}
             checked={s.animEnabled}
             onChange={(v) => update({ animEnabled: v })}
           />
         </PanelSectionRow>
         <PanelSectionRow>
           <DropdownItem
-            label="Effect"
+            label={t('anim.effect')}
             disabled={!s.animEnabled}
             selectedOption={s.animEffect}
-            rgOptions={EFFECT_OPTIONS}
+            rgOptions={localized(EFFECT_OPTIONS)}
             onChange={(o) => update({ animEffect: o.data as AnimEffect })}
           />
         </PanelSectionRow>
         <PanelSectionRow>
           <DropdownItem
-            label="Comes from"
+            label={t('anim.direction')}
             disabled={!s.animEnabled || !slideEffect}
             selectedOption={s.animDirection}
-            rgOptions={DIRECTION_OPTIONS}
+            rgOptions={localized(DIRECTION_OPTIONS)}
             onChange={(o) => update({ animDirection: o.data as AnimDirection })}
           />
         </PanelSectionRow>
         <PanelSectionRow>
           <SliderField
-            label="Duration (ms)"
+            label={t('anim.duration')}
             disabled={!s.animEnabled}
             value={s.animDurationMs}
             min={100}
@@ -132,23 +138,54 @@ function SettingsPanel() {
         </PanelSectionRow>
       </PanelSection>
 
-      <PanelSection title="Preview">
+      <PanelSection title={t('preview.title')}>
         <PanelSectionRow>
           <ButtonItem
             layout="below"
             onClick={() =>
-              toaster.toast({ title: 'Decky Position Toasts', body: 'Test notification — this is where toasts appear.' })
+              toaster.toast({ title: 'Decky Position Toasts', body: t('preview.toastBody') })
             }
           >
-            Send test notification
+            {t('preview.send')}
           </ButtonItem>
         </PanelSectionRow>
       </PanelSection>
+      <LanguageSection />
     </>
   );
 }
 
+/** Language: automatic (Steam's) or picked here. */
+const LanguageSection: FC = () => {
+  const lang = useLanguage();
+  const [setting, setSetting] = useState<LangSetting>(getLangSetting);
+  const [steamLang, setSteamLang] = useState<Lang>(lang);
+  useEffect(() => {
+    void steamLanguageNow().then(setSteamLang);
+  }, []);
+  return (
+    <PanelSection title={t('lang.title')}>
+      <PanelSectionRow>
+        <DropdownItem
+          label={t('lang.label')}
+          rgOptions={[
+            { data: 'auto', label: t('lang.auto', { lang: LANGUAGE_NAMES[steamLang] }) },
+            { data: 'en', label: LANGUAGE_NAMES.en },
+            { data: 'pt-BR', label: LANGUAGE_NAMES['pt-BR'] },
+          ]}
+          selectedOption={setting}
+          onChange={(o) => {
+            setSetting(o.data as LangSetting);
+            void setLangSetting(o.data as LangSetting);
+          }}
+        />
+      </PanelSectionRow>
+    </PanelSection>
+  );
+};
+
 export default definePlugin(() => {
+  void initLanguage();
   positioner = new Positioner();
   if (!positioner.init()) console.warn('[position-toasts] positioner disabled this session');
 

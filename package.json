@@ -1,6 +1,6 @@
 {
   "name": "decky-position-toasts",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Move Steam Deck notification toasts to any corner, with custom entry animations",
   "type": "module",
   "scripts": {
