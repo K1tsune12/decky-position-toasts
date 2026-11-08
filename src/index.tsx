@@ -172,7 +172,7 @@ const LanguageSection: FC = () => {
         <DropdownItem
           label={t('lang.label')}
           rgOptions={[
-            { data: 'auto', label: t('lang.auto', { lang: LANGUAGE_NAMES[steamLang] }) },
+            { data: 'auto', label: t('lang.auto', { lang: steamLang }) },
             { data: 'en', label: LANGUAGE_NAMES.en },
             { data: 'pt-BR', label: LANGUAGE_NAMES['pt-BR'] },
           ]}
