@@ -15,6 +15,7 @@ import { Animator } from './animator';
 import { Key, LANGUAGE_NAMES, Lang, LangSetting, getLangSetting, initLanguage, setLangSetting, steamLanguageNow, t, useLanguage } from './i18n';
 import { Positioner } from './positioner';
 import { AnimDirection, AnimEffect, Corner, PosSettings, getSettings, saveSettings } from './settings';
+import { UpdateCheckButton } from './updateCheck';
 
 const CORNER_OPTIONS: { data: Corner; label: Key }[] = [
   { data: Corner.TopLeft, label: 'corner.topLeft' },
@@ -45,7 +46,7 @@ let positioner: Positioner | undefined;
 let animator: Animator | undefined;
 
 function SettingsPanel() {
-  useLanguage();
+  const lang = useLanguage();
   const [s, setS] = useState<PosSettings>(() => getSettings());
   const update = (patch: Partial<PosSettings>) => setS(saveSettings(patch));
 
@@ -154,6 +155,9 @@ function SettingsPanel() {
         </PanelSectionRow>
       </PanelSection>
       <LanguageSection />
+      <PanelSection>
+        <UpdateCheckButton repo="K1tsune12/decky-position-toasts" pluginName="Decky Position Toasts" lang={lang} />
+      </PanelSection>
     </>
   );
 }
